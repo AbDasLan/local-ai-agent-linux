@@ -135,3 +135,35 @@ Mit diesem Befehl öffnet sich ein leerer Editor indem die n8n Konfiguration ein
 nano docker-compose.yml
 ```
 
+Inhalt der Datei
+```bash
+version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: unless-stopped
+```
+
+Speichern: *Ctrl* + *O* → Enter <br>
+Beenden: *Ctrl* + *X*
+
+Command um zu prüfen ob die Datei korrekt ist
+```bash
+docker compose up -d
+```
+Es wird geprüft ob das n8n image lokal vorhanden ist und die Datei docker-compose.yml wird ausgeführt. 
+
+Nach erfolgreichem Ausführen der Datei sieht der Output wie folgt aus
+```bash
+WARN[0000] /home/abdul/agentwerk/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion 
+[+] up 15/15
+ ✔ Image n8nio/n8n           Pulled                                                                                                                                                     641.7s
+ ✔ Network agentwerk_default Created                                                                                                                                                      0.1s
+ ✔ Container n8n             Started  
+ ```

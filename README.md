@@ -135,3 +135,198 @@ Mit diesem Befehl öffnet sich ein leerer Editor indem die n8n Konfiguration ein
 nano docker-compose.yml
 ```
 
+Der Inhalt dieser Datei
+```bash
+version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    restart: unless-stopped
+```
+Speichern: *Ctrl* + *O* → Enter
+Beenden: *Ctrl* + *X*
+
+Wenn die Datei erfogreich ausgeführt wurde, dann müsste sowas ähnliches im Output stehen
+```text
+[+] Running 3/3
+ ✔ Network agentwerk_default   Created
+ ✔ Container agentwerk-n8n-1   Started
+ ✔ Container agentwerk-db-1    Started
+```
+
+Mit folgendem Befehl kann man überprüfen ob Docker korrekt installiert ist und funktioniert
+```bash
+docker run hello-world
+```
+
+Falls keine Probleme auftreten, sollte das erscheinen
+```text
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+```
+
+Der Befehl um n8n zu starten
+```bash
+docker volume create n8n_data
+docker run -it --rm --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n
+``
+```
+
+Falls n8n nicht installiert ist, wird das Image vom offiziellen Docker Regitry gezogen.
+Nachdem das Image erfolgreich gezogen wurde, kommt folgende Meldung
+```bash
+docker run -it --rm --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n
+``
+n8n_data
+Unable to find image 'docker.n8n.io/n8nio/n8n:latest' locally
+latest: Pulling from n8nio/n8n
+319da0b8bec5: Pull complete 
+a8342f1cbe78: Pull complete 
+066d0200625d: Pull complete 
+ef97b32b4277: Download complete 
+Digest: sha256:ad20607cdd24bac004ec44804b6b8ded9a2fbf92ed46c4496bf007762c883af2
+Status: Downloaded newer image for docker.n8n.io/n8nio/n8n:latest
+docker: Error response from daemon: Conflict. The container name "/n8n" is already in use by container "c00be688f4d59c20a76ee3c5f3eb1962c5bcd0a732ce32fb7e4fc46007cb8519". You have to remove (or rename) that container to be able to reuse that name.
+
+Run 'docker run --help' for more information
+
+``
+```
+Jetzt muss n8n nochmal gestartet werden
+```
+docker volume create n8n_data
+docker run -it --rm --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n
+``
+```
+
+Es kann passieren, dass folgende Fehlermeldung kommt
+```Fehlermeldung
+docker: Error response from daemon: Conflict. The container name "/n8n" is already in use by container "c00be688f4d59c20a76ee3c5f3eb1962c5bcd0a732ce32fb7e4fc46007cb8519". You have to remove (or rename) that container to be able to reuse that name.
+
+Run 'docker run --help' for more information
+```
+
+Container stoppen
+```bash
+docker stop n8n
+```
+
+Container löschen
+```bash
+docker rm n8n
+``
+```
+
+Docker n8n neustarten
+```bash
+docker run -it --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+``
+```
+
+Um zu überprüfen ob n8n läuft
+```bash
+CONTAINER ID   IMAGE                     COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+07af28b17949   docker.n8n.io/n8nio/n8n   "tini -- /docker-ent…"   4 minutes ago   Up 4 minutes   0.0.0.0:5678->5678/tcp, [::]:5678->5678/tcp   n8n
+```
+
+Im Browser folgenden link eingeben
+```bash
+http://localhost:5678
+```
+Jetzt sollte sich ein Fenster öffnen wo man sich mit Email-Addresse, Name/Vorname und Passwort registrieren kann.
+Nach erfolgreicher Registrierung gibt es die Möglichkeit ein "*Onboarding*" für n8n durchzuführen. Dabei wird abgefragt, wofür man n8n nutzen möchte, in welchem Bereich es eingesetzt werden soll und wie groß das Unternehmen ist, für das man es verwenden will. <br>
+
+*n8n läuft komplett kostenlos und lokal* <br>
+
+Das Problem besteht derzeit darin, dass n8n nicht mehr läuft, sobald das Terminal geschlossen wird. Daher automatisieren wir diesen Prozess. <br>
+
+Laufenden Container stoppen
+```bash
+docker stop n8n
+``
+```
+Container entfernen
+```bash
+docker rm n8n
+```
+
+Container mit Auto Start neu starten
+```bash
+docker run -d \
+--name n8n \
+--restart unless stopped \
+-p 5678:5678 \
+-v n8n_data:/home/node/.n8n \
+docker.n8n.io/n8nio/n8n
+```
+oder in einer Zeile
+```bash
+docker run -d --name n8n --restart unless-stopped -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+``
+```
+
+Erklärung
+**docker**
+→ Das Docker Programm
+**run**
+→ Startet einen Container
+**-d**
+→ Läuft im Hintergrund (Auch wenn Terminal geschlossen wird)
+**--name n8n**
+→ Container wird der name n8n zugewiesen
+**restart unless stopped**
+→ Startet n8n automatisch nach Neustart au0er es wird bewusst gestoppt
+**-p 5678:5678**
+→ Verbindet Laptop-Port 5678 mit n8n Container
+**-v n8n_data:/home/node/.n8n**
+→ Dauerhafter Speicher für Workflow und Zugangsdaten
+**docker.n8n.io/n8nio/n8n**
+→ Das offizielle n8n image
+
+Um zu prüfen ob Der Container automatisch nach eine Hochfahren oder Neustart läuft
+```bash
+docker inspect -f '{{.HostConfig.RestartPolicy.Name}}' n8n
+```
+Der Output sollte wie folgt aussehen
+```bash
+unless-stopped
+```
+
+Browser Link
+```bash
+http://localhost:5678
+```
+

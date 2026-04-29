@@ -5,6 +5,8 @@ Diese Anleitung ermöglicht es jedem, die Installation vollständig zu reproduzi
 # tech stack
 1. Linux Ubuntu
 2. Docker Engine
+3. n8n (Docker Image)
+4. Docker Volumes 
 
 # Dokumentation
 Aktualisiere die Packetlisten, damit das System die neusten Infos darüber hat, welche Software verfügbar ist und in welchen Versionen <br>

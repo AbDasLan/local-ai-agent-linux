@@ -20,7 +20,7 @@ sudo apt install -y ca-certificates curl gnupg lsb-release
 ```
 
 ACHTUNG!
-In manchen Anleitungen steht, dass man Docker-Desktop unter diesem Befehl installieren kann <br>
+In manchen Anleitungen steht, dass man Docker-Desktop unter diesem Befehl installieren kann <br>s
 ```bash
 sudo apt install ./docker-desktop-amd64.deb
 ```
@@ -46,7 +46,6 @@ Docker-GPG-Key hinzufügen. Das sorgt dafür, dass das System Docker Packete als
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
 | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 ```
-Das
 
 Das Docker Repository hinzufügen
 ```bash

@@ -1,4 +1,4 @@
-# local-ai-agent-linux
+# local-n8n-ai-agent-linux
 Dieses Projekt implementiert eine vollständig lokal ausgeführten KI Agenten mit n8n.<br>
 Diese Anleitung ermöglicht es jedem, die Installation vollständig zu reproduzieren – inklusive potentiell aufgetretenen Probleme und deren Lösungen.
 
